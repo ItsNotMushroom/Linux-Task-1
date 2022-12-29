@@ -1,0 +1,48 @@
+#!/bin/bash
+v=
+d=
+oset=
+filename=
+sfx=
+temp=
+for arg in "$@"
+do
+
+    if [[ "${arg:0:1}" == "-" ]]
+    then
+        case $arg in
+        -v) v=1
+            ;;
+                -d) d=1
+                        ;;
+                -h) echo "-d print old and new file names without actual renaming"
+                        echo "-v print old and new names of renamed files"
+                        echo "-h print help message"
+                        echo "option and suffix/file names separator"
+                        echo " {-d or -v} {--} {filename} {suffix}"
+                        ;;
+                --) break
+                        ;;
+        *) echo "$arg is invalid option...type -h for help!" >&2
+            exit 2
+            ;;
+        esac
+    fi
+done
+
+if [[ $v && $d ]]
+then
+        echo "Error! -you can not use -v and -d at the same time">&1
+        exit 1
+fi
+for arg in "$@"
+do
+    if [[ $oset ||  "${arg:0:1}" != "-" ]]
+    then
+        if [[ -z $filename ]]
+        then
+            filename=$arg
+        elif [[ -z $sfx ]]
+        then
+            sfx=$arg
+        fi
